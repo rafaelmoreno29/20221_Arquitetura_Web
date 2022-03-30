@@ -4,23 +4,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import com.example.aula3.entity.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class UsuarioRepository {
-    private static String INSERT = "insert into usuario(nome,email,senha) values(?,?,?)";
-    private static String SELECT_ALL = "select * from usuario";
+    private static String SELECT_ALL = "select * from tb_usuario";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private EntityManager entityManager;
+
+    @Transactional
     public Usuario inserir(Usuario usuario) {
-        jdbcTemplate.update(INSERT, new Object[] { usuario.getNome(), usuario.getEmail(), usuario.getSenha() });
+        entityManager.persist(usuario);
         return usuario;
     }
 
