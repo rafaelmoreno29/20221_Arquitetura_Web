@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -19,6 +21,10 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
+    @ManyToOne
+    @JoinColumn(name = "perfil_id")
+    private Perfil perfil;
+
     
     public Usuario(int id, String nome, String email, String senha) {
         this.id = id;
@@ -54,8 +60,14 @@ public class Usuario {
     }
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
-        return "Id: " + id + ", nome: " + nome; 
+        return "Id: " + id + ", nome: " + nome + ", Perfil: " +
+        (perfil != null ? perfil.getNome() : ""); 
+    }
+    public Perfil getPerfil() {
+        return perfil;
+    }
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
     }
     
 }
