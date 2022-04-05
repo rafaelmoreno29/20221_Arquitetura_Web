@@ -23,14 +23,26 @@ public class Aula3Application {
 			return args ->{
 				Perfil pAdmin = new Perfil(0,"Admin");
 				Perfil pBasico = new Perfil(0,"Básico");
-				perfilRepository.inserir(pAdmin);
-				perfilRepository.inserir(pBasico);
+				perfilRepository.save(pAdmin);
+				perfilRepository.save(pBasico);
 
 				Usuario usu1 = new Usuario(0,"teste","teste@teste","123");
 				usu1.setPerfil(pAdmin);
 				usuarioRepository.inserir(usu1);
 				List<Usuario> listaUsuarios = usuarioRepository.obterTodos();
 				listaUsuarios.forEach(System.out::println);	
+
+				System.out.println("**************");
+				System.out.println(perfilRepository.findByNome("Admin"));
+
+				Perfil p1 = perfilRepository.findPerfilFetchUsuarios(pAdmin.getId());
+				System.out.println(p1);
+				System.out.println(p1.getUsuarios());
+
+				Perfil p2 = perfilRepository.findPerfilFetchUsuarios(pBasico.getId());
+				System.out.println(p2);
+				System.out.println(p2.getUsuarios());
+				
 			};
 		}
 

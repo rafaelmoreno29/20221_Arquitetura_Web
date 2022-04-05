@@ -44,4 +44,11 @@ public class Perfil {
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return "Id: " + id + " nome: " + nome;
+    }
+
+    
 }

@@ -2,6 +2,7 @@ package com.example.aula3.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "perfil_id")
     private Perfil perfil;
 
