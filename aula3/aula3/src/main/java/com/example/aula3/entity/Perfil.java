@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,5 +44,9 @@ public class Perfil {
     }
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
+    }
+    @Override
+    public String toString() {
+        return "Perfil [id=" + id + ", nome=" + nome + ", usuarios=" + usuarios + "]";
     }
 }
