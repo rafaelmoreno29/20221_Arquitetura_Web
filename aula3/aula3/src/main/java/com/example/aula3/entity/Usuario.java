@@ -21,7 +21,7 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "perfil_id")
     private Perfil perfil;
 
@@ -60,8 +60,7 @@ public class Usuario {
     }
     @Override
     public String toString() {
-        return "Id: " + id + ", nome: " + nome + ", Perfil: " +
-        (perfil != null ? perfil.getNome() : ""); 
+        return "Id: " + id + ", nome: " + nome ; 
     }
     public Perfil getPerfil() {
         return perfil;

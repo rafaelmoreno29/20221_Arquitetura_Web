@@ -16,5 +16,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PerfilRepository extends JpaRepository<Perfil,Integer>{
     
     @Query("select p from Perfil p left join fetch p.usuarios where p.id = :id")
-    List<Perfil> findPerfilByIdFetchUsuarios(@Param("id") int id);
+    List<Perfil> findPerfilByIdFetchUsuarios(@Param("id") Integer id);
 }

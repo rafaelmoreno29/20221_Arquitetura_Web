@@ -16,21 +16,24 @@ import javax.persistence.Table;
 public class Perfil {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     private String nome;
     @OneToMany(mappedBy = "perfil")
     private List<Usuario> usuarios;
 
-    public Perfil(int id, String nome) {
+    public Perfil(Integer id, String nome) {
         this.id = id;
+        this.nome = nome;
+    }
+    public Perfil(String nome) {
         this.nome = nome;
     }
     public Perfil() {
     }
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public String getNome() {
@@ -47,6 +50,6 @@ public class Perfil {
     }
     @Override
     public String toString() {
-        return "Perfil [id=" + id + ", nome=" + nome + ", usuarios=" + usuarios + "]";
+        return "Perfil [id=" + id + ", nome=" + nome;// + ", usuarios=" + usuarios + "]";
     }
 }
