@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class Aula3Application {
-
+	/*
 	@Bean
 	public CommandLineRunner 
 		init (@Autowired UsuarioRepository usuarioRepository,
@@ -45,7 +45,7 @@ public class Aula3Application {
 
 			};
 		}
-
+*/
 	public static void main(String[] args) {
 		SpringApplication.run(Aula3Application.class, args);
 	}
