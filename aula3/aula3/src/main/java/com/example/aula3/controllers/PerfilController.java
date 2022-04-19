@@ -89,7 +89,6 @@ public class PerfilController {
         return perfilRepository.findAll(example);
     }
     
-    
     @RequestMapping(value = {"/teste/{nome}","/teste2/{nome}"}, 
                     method = RequestMethod.GET,
                     consumes = {"application/json","application/xml"},
