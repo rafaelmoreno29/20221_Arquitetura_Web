@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import com.example.aula3.entity.Usuario;
+import com.example.aula3.entity.Perfil;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,5 +61,19 @@ public class UsuarioRepository {
         return entityManager.createQuery("from Usuario", Usuario.class).getResultList();
             
     }
+
+    @Transactional(readOnly = true)
+    public List<Usuario> obterPorPerfil() 
+    {
+        Perfil p = new Perfil();
+        p.setId(3);
+
+        TypedQuery<Usuario> query = entityManager.createQuery("select u from Usuario u where u.perfil = :perfil", Usuario.class);
+        query.setParameter("perfil",p);
+
+        return query.getResultList();
+            
+    }
+
 
 }

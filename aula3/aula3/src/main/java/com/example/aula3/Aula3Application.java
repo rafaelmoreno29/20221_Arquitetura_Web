@@ -34,6 +34,11 @@ public class Aula3Application {
 			usu.setPerfil(p);
 			usuarioRepository.atualizar(usu);
 
+
+			List<Usuario> listaUsuarios2 =usuarioRepository.obterPorPerfil();
+			listaUsuarios2.forEach(System.out::println);
+
+
 		};
 	}
 
