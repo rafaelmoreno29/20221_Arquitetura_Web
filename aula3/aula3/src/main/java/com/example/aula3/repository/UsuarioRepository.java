@@ -3,6 +3,7 @@ package com.example.aula3.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -18,6 +19,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer>{    
-  List<Usuario> findByNomeLike(String nome);
-
+  List<Usuario> findByNomeLike(String nome);  
 }
