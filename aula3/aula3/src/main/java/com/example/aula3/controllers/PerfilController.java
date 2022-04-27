@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * PerfilController
  */
 @RestController
-@RequestMapping(value = "/perfil")
+@RequestMapping(value = "/api/perfil")
 public class PerfilController {
 
     private PerfilRepository perfilRepository;

@@ -1,5 +1,7 @@
 package com.example.aula3.services;
 
+import com.example.aula3.dto.DadosUsuarioDTO;
+import com.example.aula3.dto.PerfilDTO;
 import com.example.aula3.dto.UsuarioDTO;
 import com.example.aula3.entity.Perfil;
 import com.example.aula3.entity.Usuario;
@@ -32,5 +34,46 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setPerfil(perfil);
 
         return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public DadosUsuarioDTO obterUsuarioPorId(Integer id) {        
+        return usuarioRepository.findById(id).map( u ->{
+            return DadosUsuarioDTO
+                    .builder()
+                    .email(u.getEmail())
+                    .nome(u.getNome())
+                    .perfil(PerfilDTO.builder()
+                            .id(u.getPerfil().getId())
+                            .nome(u.getPerfil().getNome()
+                            ).build())
+                    .build();
+        })
+.orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
+    }
+
+    @Override
+    @Transactional
+    public void remover(Integer id) {
+       usuarioRepository.deleteById(id);        
+    }
+
+    @Override
+    @Transactional
+    public void editar(Integer id, UsuarioDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(()-> 
+                new RegraNegocioException("Usuário não encontrado"));
+        Perfil perfil = perfilRepository.findById(dto.getPerfil())
+            .orElseThrow(()-> 
+                new RegraNegocioException("Perfil não existe"));
+        
+        usuario.setEmail(dto.getEmail());
+        usuario.setNome(dto.getNome());
+        usuario.setSenha(dto.getSenha());
+        usuario.setPerfil(perfil);
+
+        usuarioRepository.save(usuario);
+        
     }
 }
