@@ -8,4 +8,8 @@ public interface UsuarioService {
     Usuario salvar(UsuarioDTO dto);
 
     DadosUsuarioDTO obterUsuario(Integer id);
+
+    void remover(Integer id);
+
+    void editar(Integer id, UsuarioDTO dto);
 }

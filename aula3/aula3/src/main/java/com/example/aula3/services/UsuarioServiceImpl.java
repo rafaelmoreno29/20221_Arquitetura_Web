@@ -51,4 +51,25 @@ public class UsuarioServiceImpl implements UsuarioService {
         }).orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
 
     }
+
+    @Override
+    @Transactional
+    public void remover(Integer id) {
+        usuarioRepository.deleteById(id);        
+    }
+
+    @Override
+    public void editar(Integer id, UsuarioDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(()-> new RegraNegocioException("Código usuário não encontrado."));
+        
+        Perfil perfil = perfilRepository.findById(dto.getPerfil()).orElseThrow(()-> new RegraNegocioException("Perfil não encontrado."));
+
+        usuario.setNome(dto.getNome());
+        usuario.setSenha(dto.getSenha());
+        usuario.setEmail(dto.getEmail());
+        usuario.setPerfil(perfil);
+
+        usuarioRepository.save(usuario);
+
+    }
 }
