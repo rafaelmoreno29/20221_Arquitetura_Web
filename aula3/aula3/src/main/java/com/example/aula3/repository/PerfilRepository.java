@@ -17,4 +17,12 @@ public interface PerfilRepository extends JpaRepository<Perfil,Integer>{
     
     @Query("select p from Perfil p left join fetch p.usuarios where p.id = :id")
     List<Perfil> findPerfilByIdFetchUsuarios(@Param("id") int id);
+
+   // @Query(value =  "select count(*) from tb_usuario where perfil_id = :id", nativeQuery = true)
+   // Integer countUsuario(@Param("id") int id);
+
+    @Query(value =  "select count(u) from Usuario u where u.perfil = :p")
+    Integer countUsuario(@Param("p") Perfil p);
+
+    Integer countById(@Param("id") int id);
 }

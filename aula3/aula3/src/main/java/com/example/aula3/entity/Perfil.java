@@ -18,7 +18,7 @@ public class Perfil {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String nome;
-    @OneToMany(mappedBy = "perfil")
+    @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
     private List<Usuario> usuarios;
 
     public Perfil(Integer id, String nome) {

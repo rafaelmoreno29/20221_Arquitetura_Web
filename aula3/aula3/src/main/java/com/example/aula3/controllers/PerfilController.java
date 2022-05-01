@@ -42,6 +42,9 @@ public class PerfilController {
 
     @GetMapping("/{id}")    
     public Perfil getById(@PathVariable int id){
+      //  Perfil p = new Perfil();
+       // p.setId(1);
+        System.out.println(perfilRepository.countById(1));
         return perfilRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(
             HttpStatus.NOT_FOUND, "Perfil não encontrado."));

@@ -1,5 +1,7 @@
 package com.example.aula3.controllers;
 
+import java.util.ArrayList;
+
 import com.example.aula3.dto.DadosUsuarioDTO;
 import com.example.aula3.dto.UsuarioDTO;
 import com.example.aula3.entity.Usuario;
@@ -35,6 +37,11 @@ public class UsuarioController {
     @GetMapping("{id}")
     public DadosUsuarioDTO getById(@PathVariable Integer id){
         return usuarioService.obterUsuarioPorId(id);
+    }
+
+    @GetMapping
+    public ArrayList<DadosUsuarioDTO>  getAll(){
+        return usuarioService.obterUsuarios();
     }
 
     @DeleteMapping("{id}")
