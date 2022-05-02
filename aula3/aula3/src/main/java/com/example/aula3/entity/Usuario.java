@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 
 @Entity
@@ -19,6 +20,8 @@ public class Usuario {
     private int id;
     @Column(length = 100)
     private String nome;
+
+    @NotEmpty(message = "E-mail é obrigatório")
     private String email;
     private String senha;
     @ManyToOne
