@@ -22,7 +22,13 @@ public class ApplicationControllerAdvice {
         return new ApiErrors(msg);
     }
 
-  
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrors handlerMethodValidException(MethodArgumentNotValidException ex){
+        String msg = ex.getMessage();
+        return new ApiErrors(msg);
+    }
+    
 
     
 }
