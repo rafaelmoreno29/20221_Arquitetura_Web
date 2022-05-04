@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tb_perfil")
@@ -17,6 +18,7 @@ public class Perfil {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @NotEmpty(message = "Nome é obrigatório")
     private String nome;
     @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
     private List<Usuario> usuarios;

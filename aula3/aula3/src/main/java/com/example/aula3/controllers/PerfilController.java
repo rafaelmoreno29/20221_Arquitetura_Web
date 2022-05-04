@@ -3,6 +3,8 @@ package com.example.aula3.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.example.aula3.entity.Perfil;
 import com.example.aula3.repository.PerfilRepository;
 
@@ -52,7 +54,7 @@ public class PerfilController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Perfil save(@RequestBody Perfil perfil) {
+    public Perfil save(@Valid @RequestBody Perfil perfil) {
         return perfilRepository.save(perfil);  
     }
 
