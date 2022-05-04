@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.example.aula3.entity.Perfil;
 import com.example.aula3.repository.PerfilRepository;
+import javax.validation.Valid;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -52,7 +53,7 @@ public class PerfilController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Perfil save(@RequestBody Perfil perfil) {
+    public Perfil save(@Valid @RequestBody Perfil perfil) {
         return perfilRepository.save(perfil);  
     }
 

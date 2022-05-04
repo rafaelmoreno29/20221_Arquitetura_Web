@@ -1,6 +1,7 @@
 package com.example.aula3.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,10 @@ import lombok.ToString;
 public class UsuarioDTO {
     @NotEmpty(message = "E-mail é obrigatório")
     private String email;
+    @NotEmpty(message = "Nome é obrigatório")
     private String nome;
+    @NotEmpty(message = "Senha é obrigatório")
     private String senha;
+    @NotNull(message = "Perfil é obrigatório")
     private Integer perfil;
 }

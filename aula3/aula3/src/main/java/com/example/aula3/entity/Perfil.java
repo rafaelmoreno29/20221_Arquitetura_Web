@@ -10,6 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.example.aula3.validation.NomePerfil;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name = "tb_perfil")
@@ -17,6 +23,9 @@ public class Perfil {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @NotEmpty(message = "Nome é obrigatório")
+    @NomePerfil(message = "Nome tem que estar no padrão")
+    @NotNull(message = "Informe um valor")
     private String nome;
     @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
     private List<Usuario> usuarios;

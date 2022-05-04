@@ -1,5 +1,8 @@
 package com.example.aula3.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.RollbackException;
 import javax.validation.ConstraintViolationException;
 
@@ -25,8 +28,14 @@ public class ApplicationControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handlerMethodValidException(MethodArgumentNotValidException ex){
-        String msg = ex.getMessage();
-        return new ApiErrors(msg);
+       List<String> erros = ex.getBindingResult().getAllErrors()
+       .stream()
+       .map(erro -> erro.getDefaultMessage())
+       .collect(
+            Collectors.toList()
+        );
+       
+        return new ApiErrors(erros);
     }
     
 
