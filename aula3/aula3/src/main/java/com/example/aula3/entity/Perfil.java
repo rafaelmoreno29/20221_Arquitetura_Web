@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.example.aula3.validations.NomePerfil;
+
 @Entity
 @Table(name = "tb_perfil")
 public class Perfil {
@@ -19,6 +21,7 @@ public class Perfil {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotEmpty(message = "Nome é obrigatório")
+    @NomePerfil(message = "Nome do perfil fora do padrão estipulado")
     private String nome;
     @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
     private List<Usuario> usuarios;

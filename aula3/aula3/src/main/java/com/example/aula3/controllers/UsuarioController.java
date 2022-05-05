@@ -2,6 +2,8 @@ package com.example.aula3.controllers;
 
 import java.util.ArrayList;
 
+import javax.validation.Valid;
+
 import com.example.aula3.dto.DadosUsuarioDTO;
 import com.example.aula3.dto.UsuarioDTO;
 import com.example.aula3.entity.Usuario;
@@ -29,7 +31,7 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer save (@RequestBody UsuarioDTO dto){
+    public Integer save (@Valid @RequestBody UsuarioDTO dto){
         Usuario usuario = usuarioService.salvar(dto);
         return usuario.getId();
     }
