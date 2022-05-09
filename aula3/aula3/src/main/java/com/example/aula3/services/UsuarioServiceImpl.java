@@ -26,14 +26,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public Usuario salvar(UsuarioDTO dto) {
-        Perfil perfil = perfilRepository.findById(dto.getPerfil())
-                .orElseThrow(() -> new RegraNegocioException("Código do perfil não encontrado."));
+       // Perfil perfil = perfilRepository.findById(dto.getPerfil())
+       //         .orElseThrow(() -> new RegraNegocioException("Código do perfil não encontrado."));
 
         Usuario usuario = new Usuario();
         usuario.setEmail(dto.getEmail());
         usuario.setNome(dto.getNome());
         usuario.setSenha(dto.getSenha());
-        usuario.setPerfil(perfil);
+      //  usuario.setPerfil(perfil);
 
         return usuarioRepository.save(usuario);
     }
@@ -43,11 +43,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findById(id).map(u -> {
             return DadosUsuarioDTO
                     .builder()
+                    .senha(u.getSenha())
                     .email(u.getEmail())
                     .nome(u.getNome())
-                    .perfil(PerfilDTO.builder()
-                            .id(u.getPerfil().getId())
-                            .nome(u.getPerfil().getNome()).build())
+                 //   .perfil(PerfilDTO.builder()
+                  //          .id(u.getPerfil().getId())
+                   //         .nome(u.getPerfil().getNome()).build())
                     .build();
         })
                 .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
@@ -64,13 +65,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void editar(Integer id, UsuarioDTO dto) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
-        Perfil perfil = perfilRepository.findById(dto.getPerfil())
-                .orElseThrow(() -> new RegraNegocioException("Perfil não existe"));
+        //Perfil perfil = perfilRepository.findById(dto.getPerfil())
+          //      .orElseThrow(() -> new RegraNegocioException("Perfil não existe"));
 
         usuario.setEmail(dto.getEmail());
         usuario.setNome(dto.getNome());
         usuario.setSenha(dto.getSenha());
-        usuario.setPerfil(perfil);
+     //   usuario.setPerfil(perfil);
 
         usuarioRepository.save(usuario);
 
@@ -85,11 +86,12 @@ public class UsuarioServiceImpl implements UsuarioService {
             dados.add(
                     DadosUsuarioDTO
                             .builder()
+                            .id(u.getId())
                             .email(u.getEmail())
                             .nome(u.getNome())
-                            .perfil(PerfilDTO.builder()
-                                    .id(u.getPerfil().getId())
-                                    .nome(u.getPerfil().getNome()).build())
+                           // .perfil(PerfilDTO.builder()
+                           //         .id(u.getPerfil().getId())
+                           //         .nome(u.getPerfil().getNome()).build())
                             .build());
         });
         return dados;

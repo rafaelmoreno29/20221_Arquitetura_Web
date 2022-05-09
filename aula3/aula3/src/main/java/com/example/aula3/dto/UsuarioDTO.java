@@ -24,8 +24,8 @@ public class UsuarioDTO {
     private String nome;
     @NotEmpty(message = "Senha é obrigatório")
     private String senha;
-    @NotNull(message = "Perfil é obrigatório")
-    private Integer perfil;
+  //  @NotNull(message = "Perfil é obrigatório")
+ //   private Integer perfil;
    // @CPF(message = "CPF inválido")
    // private String cpf;
 }
