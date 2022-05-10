@@ -14,12 +14,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsuarioDTO {
-    @NotEmpty(message = "E-mail é obrigatório")
+    @NotEmpty(message = "{campo.email-usuario.obrigatorio}")
     private String email;
-    @NotEmpty(message = "Nome é obrigatório")
+    @NotEmpty(message = "{campo.nome-usuario.obrigatorio}")
     private String nome;
-    @NotEmpty(message = "Senha é obrigatório")
+    @NotEmpty(message = "{campo.senha-usuario.obrigatorio}")
     private String senha;
-    @NotNull(message = "Perfil é obrigatório")
+    @NotNull(message = "{campo.perfil-usuario.obrigatorio}")
     private Integer perfil;
 }
