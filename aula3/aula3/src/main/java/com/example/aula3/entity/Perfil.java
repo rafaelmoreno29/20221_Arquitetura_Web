@@ -24,7 +24,7 @@ public class Perfil {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotEmpty(message = "Nome é obrigatório")
-    @NomePerfil(message = "Nome tem que estar no padrão")
+    //@NomePerfil(message = "Nome tem que estar no padrão")
     @NotNull(message = "Informe um valor")
     private String nome;
     @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)

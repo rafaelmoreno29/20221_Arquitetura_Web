@@ -12,6 +12,12 @@ import com.example.aula3.exceptions.RegraNegocioException;
 import com.example.aula3.repository.PerfilRepository;
 import com.example.aula3.repository.UsuarioRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,79 +25,95 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioServiceImpl implements UsuarioService {
-    private final UsuarioRepository usuarioRepository;
-    private final PerfilRepository perfilRepository;
+public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
+        private final UsuarioRepository usuarioRepository;
+        private final PerfilRepository perfilRepository;
+        private final PasswordEncoder passwordEncoder;
 
-    @Override
-    @Transactional
-    public Usuario salvar(UsuarioDTO dto) {
-        Perfil perfil = perfilRepository.findById(dto.getPerfil())
-                .orElseThrow(() -> new RegraNegocioException("Código do perfil não encontrado."));
+        @Override
+        public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+                Usuario usuario = usuarioRepository.findByEmail(email)
+                                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+                String[] roles = usuario.getPerfil().getNome() == "Administrador" ? new String[]{"ADMIN","USER"} : new String[]{"USER"};
+        
+                return User.builder()
+                        .username(usuario.getEmail())
+                        .password(usuario.getSenha())
+                        .roles(roles)
+                        .build();
+        }
 
-        Usuario usuario = new Usuario();
-        usuario.setEmail(dto.getEmail());
-        usuario.setNome(dto.getNome());
-        usuario.setSenha(dto.getSenha());
-        usuario.setPerfil(perfil);
+        @Override
+        @Transactional
+        public Usuario salvar(UsuarioDTO dto) {
+                
+                Perfil perfil = perfilRepository.findById(dto.getPerfil())
+                                .orElseThrow(() -> new RegraNegocioException("Código do perfil não encontrado."));
 
-        return usuarioRepository.save(usuario);
-    }
+                Usuario usuario = new Usuario();
+                usuario.setEmail(dto.getEmail());
+                usuario.setNome(dto.getNome());
+                usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+                usuario.setPerfil(perfil);
 
-    @Override
-    public DadosUsuarioDTO obterUsuarioPorId(Integer id) {
-        return usuarioRepository.findById(id).map(u -> {
-            return DadosUsuarioDTO
-                    .builder()
-                    .email(u.getEmail())
-                    .nome(u.getNome())
-                    .perfil(PerfilDTO.builder()
-                            .id(u.getPerfil().getId())
-                            .nome(u.getPerfil().getNome()).build())
-                    .build();
-        })
-                .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
-    }
+                return usuarioRepository.save(usuario);
+        }
 
-    @Override
-    @Transactional
-    public void remover(Integer id) {
-        usuarioRepository.deleteById(id);
-    }
+        @Override
+        public DadosUsuarioDTO obterUsuarioPorId(Integer id) {
+                return usuarioRepository.findById(id).map(u -> {
+                        return DadosUsuarioDTO
+                                        .builder()
+                                        .email(u.getEmail())
+                                        .nome(u.getNome())
+                                        .perfil(PerfilDTO.builder()
+                                                        .id(u.getPerfil().getId())
+                                                        .nome(u.getPerfil().getNome()).build())
+                                        .build();
+                })
+                                .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
+        }
 
-    @Override
-    @Transactional
-    public void editar(Integer id, UsuarioDTO dto) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
-        Perfil perfil = perfilRepository.findById(dto.getPerfil())
-                .orElseThrow(() -> new RegraNegocioException("Perfil não existe"));
+        @Override
+        @Transactional
+        public void remover(Integer id) {
+                usuarioRepository.deleteById(id);
+        }
 
-        usuario.setEmail(dto.getEmail());
-        usuario.setNome(dto.getNome());
-        usuario.setSenha(dto.getSenha());
-        usuario.setPerfil(perfil);
+        @Override
+        @Transactional
+        public void editar(Integer id, UsuarioDTO dto) {
+                Usuario usuario = usuarioRepository.findById(id)
+                                .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado"));
+                Perfil perfil = perfilRepository.findById(dto.getPerfil())
+                                .orElseThrow(() -> new RegraNegocioException("Perfil não existe"));
 
-        usuarioRepository.save(usuario);
+                usuario.setEmail(dto.getEmail());
+                usuario.setNome(dto.getNome());
+                usuario.setSenha(dto.getSenha());
+                usuario.setPerfil(perfil);
 
-    }
+                usuarioRepository.save(usuario);
 
-    @Override
-    public ArrayList<DadosUsuarioDTO> obterUsuarios() {
-        ArrayList<DadosUsuarioDTO> dados = new ArrayList<>();
+        }
 
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        usuarios.forEach(u -> {
-            dados.add(
-                    DadosUsuarioDTO
-                            .builder()
-                            .email(u.getEmail())
-                            .nome(u.getNome())
-                            .perfil(PerfilDTO.builder()
-                                    .id(u.getPerfil().getId())
-                                    .nome(u.getPerfil().getNome()).build())
-                            .build());
-        });
-        return dados;
-    }
+        @Override
+        public ArrayList<DadosUsuarioDTO> obterUsuarios() {
+                ArrayList<DadosUsuarioDTO> dados = new ArrayList<>();
+
+                List<Usuario> usuarios = usuarioRepository.findAll();
+                usuarios.forEach(u -> {
+                        dados.add(
+                                        DadosUsuarioDTO
+                                                        .builder()
+                                                        .email(u.getEmail())
+                                                        .nome(u.getNome())
+                                                        .perfil(PerfilDTO.builder()
+                                                                        .id(u.getPerfil().getId())
+                                                                        .nome(u.getPerfil().getNome()).build())
+                                                        .build());
+                });
+                return dados;
+        }
+
 }
