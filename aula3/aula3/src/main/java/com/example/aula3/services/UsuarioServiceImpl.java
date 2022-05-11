@@ -9,6 +9,7 @@ import com.example.aula3.dto.UsuarioDTO;
 import com.example.aula3.entity.Perfil;
 import com.example.aula3.entity.Usuario;
 import com.example.aula3.exceptions.RegraNegocioException;
+import com.example.aula3.exceptions.SenhaInvalidaException;
 import com.example.aula3.repository.PerfilRepository;
 import com.example.aula3.repository.UsuarioRepository;
 
@@ -34,19 +35,30 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
                 Usuario usuario = usuarioRepository.findByEmail(email)
                                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-                String[] roles = usuario.getPerfil().getNome() == "Administrador" ? new String[]{"ADMIN","USER"} : new String[]{"USER"};
-        
+                String[] roles = usuario.getPerfil().getNome() == "Administrador" ? new String[] { "ADMIN", "USER" }
+                                : new String[] { "USER" };
+
                 return User.builder()
-                        .username(usuario.getEmail())
-                        .password(usuario.getSenha())
-                        .roles(roles)
-                        .build();
+                                .username(usuario.getEmail())
+                                .password(usuario.getSenha())
+                                .roles(roles)
+                                .build();
+        }
+
+        public UserDetails autenticar(Usuario usuario) {
+                UserDetails user = loadUserByUsername(usuario.getEmail());
+                boolean senhaOK = passwordEncoder.matches(usuario.getSenha(), user.getPassword());
+                if (senhaOK) {
+                        return user;
+                }
+                throw new SenhaInvalidaException();
+
         }
 
         @Override
         @Transactional
         public Usuario salvar(UsuarioDTO dto) {
-                
+
                 Perfil perfil = perfilRepository.findById(dto.getPerfil())
                                 .orElseThrow(() -> new RegraNegocioException("Código do perfil não encontrado."));
 
