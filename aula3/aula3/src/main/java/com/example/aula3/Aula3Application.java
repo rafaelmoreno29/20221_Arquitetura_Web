@@ -34,7 +34,6 @@ public class Aula3Application {
 				usuarioRepository.save(usu1);
 			};
 		}
-
 	public static void main(String[] args) {
 		SpringApplication.run(Aula3Application.class, args);
 	}
