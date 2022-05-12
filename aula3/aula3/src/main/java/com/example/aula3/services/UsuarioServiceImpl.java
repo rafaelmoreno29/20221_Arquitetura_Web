@@ -12,6 +12,11 @@ import com.example.aula3.exceptions.RegraNegocioException;
 import com.example.aula3.repository.PerfilRepository;
 import com.example.aula3.repository.UsuarioRepository;
 
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +24,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioServiceImpl implements UsuarioService {
+public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     private final UsuarioRepository usuarioRepository;
     private final PerfilRepository perfilRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     @Transactional
@@ -32,7 +39,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setEmail(dto.getEmail());
         usuario.setNome(dto.getNome());
-        usuario.setSenha(dto.getSenha());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         usuario.setPerfil(perfil);
 
         return usuarioRepository.save(usuario);
@@ -94,4 +101,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         });
         return dados;
     }
+
+@Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Usuario usuario = usuarioRepository.findByEmail(username)
+                .orElseThrow(
+        ()-> new UsernameNotFoundException("Usuário não encontrado"));    
+
+        String[] roles = 
+        usuario.getPerfil().getNome()=="Administrador"
+                                ? new String[]{"ADMIN","USER"} 
+                                : new String[]{"USER"};
+        return User.builder()
+                .username(usuario.getEmail())
+                .password(usuario.getSenha())
+                .roles(roles)
+                .build();
+}
 }

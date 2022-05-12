@@ -1,5 +1,8 @@
 package com.example.aula3.config;
 
+import com.example.aula3.services.UsuarioServiceImpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,14 +17,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    @Autowired
+    private UsuarioServiceImpl usuarioService;
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-        .passwordEncoder(passwordEncoder())
-        .withUser("fulano")
-        .password(passwordEncoder().encode("123"))
-        .roles("USER");
+       auth.userDetailsService(usuarioService)
+                        .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -31,6 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .antMatchers("/api/usuario/**").hasAnyRole("ADMIN","USER")
             .antMatchers("/api/perfil/**").hasRole("ADMIN")            
             .and()
-            .formLogin();
+            .httpBasic();
     }
 }
